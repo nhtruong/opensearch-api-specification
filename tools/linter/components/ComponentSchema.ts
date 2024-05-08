@@ -4,7 +4,7 @@ import { type ValidationError } from '../../types'
 
 const NAME_REGEX = /^[A-Za-z0-9]+$/
 
-export default class Schema extends ValidatorBase {
+export default class ComponentSchema extends ValidatorBase {
   name: string
   spec: OpenAPIV3.SchemaObject
 

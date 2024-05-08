@@ -1,6 +1,6 @@
 import FileValidator from './base/FileValidator'
 import { type ValidationError } from '../../types'
-import Schema from './Schema'
+import ComponentSchema from './ComponentSchema'
 import { type OpenAPIV3 } from 'openapi-types'
 
 const CATEGORY_REGEX = /^[a-z_]+\.[a-z_]+$/
@@ -8,7 +8,7 @@ const NAME_REGEX = /^[a-z]+[a-z_]*[a-z]+$/
 
 export default class SchemaFile extends FileValidator {
   category: string
-  private _schemas: Schema[] | undefined
+  private _schemas: ComponentSchema[] | undefined
 
   constructor (file_path: string) {
     super(file_path)
@@ -24,10 +24,10 @@ export default class SchemaFile extends FileValidator {
     ]
   }
 
-  schemas (): Schema[] {
+  schemas (): ComponentSchema[] {
     if (this._schemas) return this._schemas
     this._schemas = Object.entries(this.spec().components?.schemas ?? {}).map(([name, spec]) => {
-      return new Schema(this.file, name, spec as OpenAPIV3.SchemaObject)
+      return new ComponentSchema(this.file, name, spec as OpenAPIV3.SchemaObject)
     })
     return this._schemas
   }

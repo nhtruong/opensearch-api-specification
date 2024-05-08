@@ -1,8 +1,8 @@
-import Schema from '../../../linter/components/Schema'
+import ComponentSchema from '../../../linter/components/ComponentSchema'
 import { type OpenAPIV3 } from 'openapi-types'
 
-export function schema (name: string, spec: Record<string, any> = {}): Schema {
-  return new Schema('_common.yaml', name, spec as OpenAPIV3.SchemaObject)
+export function component_schema (name: string, spec: Record<string, any> = {}): ComponentSchema {
+  return new ComponentSchema('_common.yaml', name, spec as OpenAPIV3.SchemaObject)
 }
 
 interface MockedReturnedValues {
@@ -10,8 +10,8 @@ interface MockedReturnedValues {
   validate_name?: string | undefined
 }
 
-export function mocked_schema (returned_values: MockedReturnedValues): Schema {
-  const schema = new Schema('_common.yaml', 'Schema', {})
+export function mocked_component_schema (returned_values: MockedReturnedValues): ComponentSchema {
+  const schema = new ComponentSchema('_common.yaml', 'Schema', {})
 
   if (returned_values.validate) {
     schema.validate = jest.fn();

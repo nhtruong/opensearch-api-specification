@@ -1,4 +1,4 @@
-import { mocked_schema } from './schema'
+import { mocked_component_schema } from './component_schema'
 import SchemaFile from '../../../linter/components/SchemaFile'
 
 export function schema_file (fixture: string): SchemaFile {
@@ -13,7 +13,7 @@ interface MockedReturnedValues {
 export function mocked_schema_file (ops: { returned_values?: MockedReturnedValues, schema_errors?: string[][] }): SchemaFile {
   const validator = schema_file('_common.empty.yaml')
   // eslint-disable-next-line @typescript-eslint/dot-notation
-  if (ops.schema_errors) validator['_schemas'] = ops.schema_errors.map((errors) => mocked_schema({ validate: errors }))
+  if (ops.schema_errors) validator['_schemas'] = ops.schema_errors.map((errors) => mocked_component_schema({ validate: errors }))
 
   if (ops.returned_values) {
     if (ops.returned_values.validate) {
