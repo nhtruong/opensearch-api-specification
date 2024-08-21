@@ -23,7 +23,6 @@ properties:
 
 $defs:
   reference:
-    $comment: https://spec.openapis.org/oas/v3.1.0#reference-object
     type: object
     properties:
       $ref:
@@ -135,6 +134,7 @@ $defs:
         type: boolean
     required:
       - description
+      - externalDocs
       - operationId
       - responses
       - parameters
@@ -144,18 +144,18 @@ $defs:
       - $ref: '#/$defs/distribution-extensions'
     unevaluatedProperties: true
 
-    external-documentation:
-      $comment: https://spec.openapis.org/oas/v3.1.0#external-documentation-object
-      type: object
-      properties:
-        description:
-          type: string
-        url:
-          type: string
-          format: uri
-      required:
-        - url
-      unevaluatedProperties: false
+  external-documentation:
+    $comment: https://spec.openapis.org/oas/v3.1.0#external-documentation-object
+    type: object
+    properties:
+      description:
+        type: string
+      url:
+        type: string
+        format: uri
+    required:
+      - url
+    unevaluatedProperties: false
 
   responses:
     $comment: https://spec.openapis.org/oas/v3.1.0#responses-object
