@@ -1,0 +1,168 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+description: Schema for files in the spec/namespaces directory.
+
+type: object
+additionalProperties: false
+required:
+  - $schema
+  - openapi
+  - paths
+  - components
+properties:
+  $schema:
+    type: string
+    enum: [ ../../json_schemas/spec_namespace.schema.yaml ]
+  openapi:
+    type: string
+    enum: [ 3.1.0 ]
+  paths:
+    $ref: '#/$defs/paths'
+  components:
+    $ref: '#/$defs/components'
+
+$defs:
+  reference:
+    $comment: https://spec.openapis.org/oas/v3.1.0#reference-object
+    type: object
+    properties:
+      $ref:
+        type: string
+        format: uri-reference
+      description:
+        type: string
+      title:
+        type: string
+    required: [ $ref ]
+    unevaluatedProperties: false
+
+  schema:
+    $comment: https://spec.openapis.org/oas/v3.1.0#schema-object
+    $dynamicAnchor: meta
+    type:
+      - object
+      - boolean
+
+  versioning-extensions:
+    type: object
+    properties:
+      x-version-added:
+        description: OpenSearch version when the operation/parameter was added.
+        type: string
+      x-version-deprecated:
+        description: OpenSearch version when the operation/parameter was deprecated.
+        type: string
+      x-version-removed:
+        description: OpenSearch version when the operation/parameter was removed.
+        type: string
+      x-deprecation-message:
+        description: Reason for deprecation and guidance on how to prepare for the next major version.
+        type: string
+
+  distribution-extensions:
+    type: object
+    properties:
+      x-distributions-included:
+        description: Contains a list of distributions known to include the API.
+        $ref: '#/$defs/distributions'
+      x-distributions-excluded:
+        description: Contains a list of distributions known to exclude the API.
+        $ref: '#/$defs/distributions'
+
+  distributions:
+    type: array
+    items:
+      type: string
+      enum: [ opensearch.org, amazon-managed, amazon-serverless ]
+
+  paths:
+    $comment: https://spec.openapis.org/oas/v3.1.0#paths-object
+    type: object
+    propertyNames:
+      pattern: '^/'
+    additionalProperties:
+      $ref: '#/$defs/path-item'
+    unevaluatedProperties: false
+
+  path-item:
+    $comment: https://spec.openapis.org/oas/v3.1.0#path-item-object
+    type: object
+    properties:
+      get:
+        $ref: '#/$defs/operation'
+      put:
+        $ref: '#/$defs/operation'
+      post:
+        $ref: '#/$defs/operation'
+      delete:
+        $ref: '#/$defs/operation'
+      options:
+        $ref: '#/$defs/operation'
+      head:
+        $ref: '#/$defs/operation'
+      patch:
+        $ref: '#/$defs/operation'
+      trace:
+        $ref: '#/$defs/operation'
+    additionalProperties: false
+
+  operation:
+    type: object
+    properties:
+      description:
+        type: string
+      externalDocs:
+        $ref: '#/$defs/external-documentation'
+      operationId:
+        type: string
+      x-operation-group:
+        description: Used to group operations into API actions.
+        type: string
+      x-ignorable:
+        description: Denotes that the operation should be ignored by the client generator. 
+          This is used in operation groups where some operations have been replaced by newer ones, 
+          but we still keep them in the specs because the server still supports them.
+        type: boolean
+      parameters:
+        type: array
+        items:
+          $ref: '#/$defs/reference'
+      requestBody:
+        $ref: '#/$defs/reference'
+      responses:
+        $ref: '#/$defs/responses'
+      deprecated:
+        default: false
+        type: boolean
+    required:
+      - description
+      - operationId
+      - responses
+      - parameters
+      - x-operation-group
+    allOf:
+      - $ref: '#/$defs/versioning-extensions'
+      - $ref: '#/$defs/distribution-extensions'
+    unevaluatedProperties: true
+
+    external-documentation:
+      $comment: https://spec.openapis.org/oas/v3.1.0#external-documentation-object
+      type: object
+      properties:
+        description:
+          type: string
+        url:
+          type: string
+          format: uri
+      required:
+        - url
+      unevaluatedProperties: false
+
+  responses:
+    $comment: https://spec.openapis.org/oas/v3.1.0#responses-object
+    type: object
+    propertyNames:
+      pattern: '^[1-5](?:[0-9]{2}|XX)$'
+    additionalProperties:
+      $ref: '#/$defs/reference'
+    minProperties: 1
