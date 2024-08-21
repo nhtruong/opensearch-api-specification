@@ -4,22 +4,20 @@ description: Schema for files in the spec/namespaces directory.
 
 type: object
 additionalProperties: false
+properties:
+  $schema:
+    const: ../../json_schemas/spec_namespace.schema.yaml
+  openapi:
+    const: 3.1.0
+  paths:
+    $ref: '#/$defs/paths'
+  components:
+    $ref: '#/$defs/components'
 required:
   - $schema
   - openapi
   - paths
   - components
-properties:
-  $schema:
-    type: string
-    enum: [ ../../json_schemas/spec_namespace.schema.yaml ]
-  openapi:
-    type: string
-    enum: [ 3.1.0 ]
-  paths:
-    $ref: '#/$defs/paths'
-  components:
-    $ref: '#/$defs/components'
 
 $defs:
   reference:
@@ -71,7 +69,6 @@ $defs:
       enum: [ opensearch.org, amazon-managed, amazon-serverless ]
 
   paths:
-    $comment: https://spec.openapis.org/oas/v3.1.0#paths-object
     type: object
     propertyNames:
       pattern: '^/'
@@ -79,7 +76,6 @@ $defs:
       $ref: '#/$defs/path-item'
 
   path-item:
-    $comment: https://spec.openapis.org/oas/v3.1.0#path-item-object
     type: object
     properties:
       get:
@@ -141,7 +137,6 @@ $defs:
     unevaluatedProperties: true
 
   external-documentation:
-    $comment: https://spec.openapis.org/oas/v3.1.0#external-documentation-object
     type: object
     properties:
       description:
@@ -154,7 +149,6 @@ $defs:
     unevaluatedProperties: false
 
   responses:
-    $comment: https://spec.openapis.org/oas/v3.1.0#responses-object
     type: object
     propertyNames:
       pattern: '^[1-5](?:[0-9]{2}|XX)$'
@@ -211,3 +205,58 @@ $defs:
       - schema
       - description
     additionalProperties: false
+
+  response:
+    type: object
+    properties:
+      description:
+        type: string
+      content:
+        $ref: '#/$defs/content'
+    required:
+      - content
+    additionalProperties: false
+
+  request-body:
+    type: object
+    properties:
+      description:
+        type: string
+      content:
+        $ref: '#/$defs/content'
+      required:
+        default: false
+        type: boolean
+    required:
+      - content
+    additionalProperties: false
+
+  content:
+    type: object
+    additionalProperties:
+      $ref: '#/$defs/media-type'
+    propertyNames:
+      format: media-range
+
+  media-type:
+    type: object
+    properties:
+      schema:
+        $ref: '#/$defs/schema'
+#      examples: # We will most likely generate examples from test stories. Remove this once we know for sure.
+#        type: object
+#        additionalProperties:
+#          $ref: '#/$defs/example'
+    required: [ schema ]
+    unevaluatedProperties: false
+
+#  example: # We will most likely generate examples from test stories. Remove this once we know for sure.
+#    type: object
+#    properties:
+#      description:
+#        type: string
+#      value: true
+#      externalValue:
+#        type: string
+#        format: uri
+#    unevaluatedProperties: false
