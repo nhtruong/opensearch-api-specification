@@ -36,11 +36,7 @@ $defs:
     additionalProperties: false
 
   schema:
-    $comment: https://spec.openapis.org/oas/v3.1.0#schema-object
-    $dynamicAnchor: meta
-    type:
-      - object
-      - boolean
+    $ref: https://json-schema.org/draft/2020-12/schema
 
   versioning-extensions:
     type: object
@@ -165,3 +161,53 @@ $defs:
     additionalProperties:
       $ref: '#/$defs/reference'
     minProperties: 1
+
+  components:
+    properties:
+      parameters:
+        type: object
+        additionalProperties:
+          $ref: '#/$defs/parameter'
+      responses:
+        type: object
+        additionalProperties:
+          $ref: '#/$defs/response'
+      requestBodies:
+        type: object
+        additionalProperties:
+          $ref: '#/$defs/request-body'
+
+  parameter:
+    type: object
+    properties:
+      name:
+        type: string
+      in:
+        enum:
+          - query
+          - path
+      description:
+        type: string
+      required:
+        default: false
+        type: boolean
+      deprecated:
+        default: false
+        type: boolean
+      schema:
+        $ref: '#/$defs/schema'
+      x-global:
+        description: Denotes that the parameter is a global parameter that is included in every operation
+        type: boolean
+        default: false
+      x-default:
+        description:  Contains the default value of a parameter. 
+          This is often used to override the default value specified in the schema, 
+          or to avoid accidentally changing the default value when updating a shared schema.
+        type: [string, number, boolean]
+    required:
+      - name
+      - in
+      - schema
+      - description
+    additionalProperties: false
